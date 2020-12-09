@@ -23,29 +23,67 @@ FILENAME = 'last_seen_id.txt'
 #==================================METHODS=============================================
 
 #get banana vocab from file
-def get_banana_vocab():
+def get_vocab(type):
     #Store vocab in a global list
-    f_read = open('bananaVocab.txt', 'r')
-    banana_vocab = f_read.read().strip().split(',')
+    f_read = open(type, 'r')
+    vocab = f_read.read().strip().split(',')
     f_read.close()
-    return banana_vocab
+    return vocab
 
-#Generates joke of specified word length
-def generate_joke(length):
-    BANANA_VOCAB = get_banana_vocab()
-    joke_words = []
+#Generates a simple (ofetn nonsensical) question
+def generate_question():
 
-    #Put some random words from vocab into jokes in random order
-    for i in range(length):
-        joke_words.append(BANANA_VOCAB[random.randint(0, len(BANANA_VOCAB)-1)])
+    #get words from vocab bank
+    interrogative_words = get_vocab('interrogative.txt')
+    verbPast_words = get_vocab('verbPast.txt')
+    article_words = get_vocab('article.txt')
+    noun_words = get_vocab('noun.txt')
 
-    #Ensure atleast one of the words is "banana"
-    joke_words[random.randint(0,len(joke_words)-1)] = "banana"
+    #pick random words from the vocab banks
+    interrogative = interrogative_words[random.randint(0, len(interrogative_words)-1)]
+    verbPast = verbPast_words[random.randint(0, len(verbPast_words)-1)]
+    article = article_words[random.randint(0, len(article_words)-1)]
+    noun = noun_words[random.randint(0, len(noun_words)-1)]
 
-    #convert list into string
-    joke = ' '.join(joke_words) + '!'
+    #form question
+    question = [interrogative, verbPast, article, noun]
 
-    return joke
+    #convert to string
+    questionString = ' '.join(question) + '?'
+
+    #output
+    #print(questionString)
+    return questionString
+
+##Generates a simple (ofetn nonsensical) question
+def generate_short_statement():
+
+    #get words from vocab bank
+    article_words = get_vocab('article.txt')
+    intensifier_words = get_vocab('intensifier.txt')
+    adjective_words = get_vocab('adjective.txt')
+    noun_words = get_vocab('noun.txt')
+
+    #pick random words from vocab banks
+    article = article_words[random.randint(0, len(article_words)-1)]
+    intensifier = intensifier_words[random.randint(0, len(intensifier_words)-1)]
+    adjective = adjective_words[random.randint(0, len(adjective_words)-1)]
+    noun = noun_words[random.randint(0, len(noun_words)-1)]
+
+    #form statement
+    statement = [article, intensifier, adjective, noun]
+
+    #convert to string
+    statementString = '...' + ' '.join(statement) + '!'
+
+    #output
+    #print(statementString)
+    return statementString
+
+def generate_joke():
+
+    return(emoji.emojize(":orangutan:") + ' ' + generate_question() + '\n \n' + generate_short_statement() + ' ' + emoji.emojize(":banana:"))
+
 
 #Retrieve last seen id from last seen id txt file
 def retrieve_last_id(fileName):
@@ -82,7 +120,7 @@ def reply_to_mentions():
         api.update_status('@' + mention.user.screen_name + emoji.emojize(":orangutan:"), mention.id)
 
 def tweet_banana_joke():
-    joke = generate_joke(random.randint(4, 9))
+    joke = generate_joke()
 
     print("Tweeting joke: " + joke)
     api.update_status(joke)
