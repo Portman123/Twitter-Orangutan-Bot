@@ -5,12 +5,14 @@ import random
 import threading
 
 #==================================SETUP=============================================
+f_read = open('access_stuff.txt', 'r')
+access = f_read.read().strip().split(',')
 
 #Keys for api
-CONSUMER_KEY = 'luDRvBJAG0fKJnd20eoef9xCW'
-CONSUMER_SECRET = 'nWEuwcUiyEceFPa1CCnh8s598fS9RbOYTYKx5LbMOSakAq9qpw'
-ACCESS_KEY = '1161961422051524609-8jqgUBwELyc9eigHbviOjxoNaan34a'
-ACCESS_SECRET = 'UGek5bE9K7u7CNSk3ZxxghJx7f3zfyoOULaPuoI9VTenB'
+CONSUMER_KEY = access[0]
+CONSUMER_SECRET = access[1]
+ACCESS_KEY = access[2]
+ACCESS_SECRET = access[3]
 
 #Setup api object
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
